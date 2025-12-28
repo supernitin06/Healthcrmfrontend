@@ -9,7 +9,8 @@ export default function Navbar() {
     { path: '/', label: 'Home' },
     { path: '/insurance', label: 'Insurance' },
     { path: '/checkups', label: 'Checkups' },
-    { path: '/contact', label: 'Contact Us' },
+    { path: '/about', label: 'About' },
+    { path: '/contact', label: 'Contact' },
   ];
 
   const handleLinkClick = (path) => {
@@ -38,17 +39,14 @@ export default function Navbar() {
         {/* Navigation Links */}
         <div className="flex gap-8 items-center">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.path}
-              href={link.path}
-              onClick={(e) => {
-                e.preventDefault();
-                handleLinkClick(link.path);
-              }}
+              to={link.path}
+              onClick={() => handleLinkClick(link.path)}
               className={`shimmer-link ${activeLink === link.path ? 'active' : ''}`}
             >
               {link.label}
-            </a>
+            </Link>
           ))}
           
           <Button 
@@ -131,5 +129,3 @@ export default function Navbar() {
     </nav>
   );
 }
-
-
