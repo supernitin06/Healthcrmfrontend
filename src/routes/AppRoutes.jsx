@@ -1,24 +1,32 @@
-import { Routes, Route } from "react-router-dom";
+import React from "react";
+import { createBrowserRouter } from "react-router-dom";
 
 // Pages
+import App from "../App";
 import HomePage from "../app/home/Homepage";
 import LoginPage from "../app/auth/login/LoginPage";
 import SignupPage from "../app/auth/signup/SignupPage";
 import InsurancePage from "../app/insurance/InsurancePage";
 import CheckupsPage from "../app/checkups/CheckupsPage";
 import DashboardPage from "../app/dasboard/DasboardPage";
+import AboutPage from "../app/about/AboutPage";
+import ContactPage from "../app/contact/ContactPage";
 
-export default function AppRoutes() {
-  return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
+export const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      { index: true, element: <HomePage /> },
+      { path: "login", element: <LoginPage /> },
+      { path: "signup", element: <SignupPage /> },
+      { path: "insurance", element: <InsurancePage /> },
+      { path: "checkups", element: <CheckupsPage /> },
+      { path: "dashboard", element: <DashboardPage /> },
+      { path: "about", element: <AboutPage /> },
+      { path: "contact", element: <ContactPage /> }
+    ]
+  }
+]);
 
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<SignupPage />} />
-
-      <Route path="/insurance" element={<InsurancePage />} />
-      <Route path="/checkups" element={<CheckupsPage />} />
-      <Route path="/dashboard" element={<DashboardPage />} />
-    </Routes>
-  );
-}
+export default router;

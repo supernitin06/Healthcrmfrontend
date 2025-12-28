@@ -34,6 +34,13 @@ export default function Button({ text, variant = "primary", className = "", onCl
           box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
         }
 
+        .liquid-morph-btn.outline {
+          background: transparent;
+          border: 2px solid #2563eb;
+          color: #2563eb;
+          box-shadow: none;
+        }
+
         .liquid-morph-btn::before {
           content: '';
           position: absolute;
@@ -59,6 +66,11 @@ export default function Button({ text, variant = "primary", className = "", onCl
 
         .liquid-morph-btn.secondary:hover {
           box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .liquid-morph-btn.outline:hover {
+          background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+          color: white;
         }
 
         .liquid-morph-btn:hover::before {
