@@ -1,0 +1,30 @@
+/* .navbar {
+  @apply sticky top-0 z-50 px-6 py-4 bg-white/80 backdrop-blur border-b;
+} */
+
+.nav-link {
+  position: relative;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  color: #2563eb;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  opacity: 0;
+  background: linear-gradient(90deg, transparent, #2563eb, transparent);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  opacity: 1;
+  animation: shimmer 2s linear infinite;
+}

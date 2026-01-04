@@ -1,0 +1,20 @@
+:root {
+  --color-primary: #2563eb; /* primary blue */
+  --color-muted: #6b7280;
+}
+
+.text-primary {
+  color: var(--color-primary);
+}
+
+.text-gradient {
+  background: linear-gradient(90deg, var(--color-primary), #0ea5e9);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* small helper for consistent link color */
+.link-muted {
+  color: var(--color-muted);
+}

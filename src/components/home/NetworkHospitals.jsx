@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Shield, Award, CheckCircle, Star, MapPin, Phone, Mail } from 'lucide-react';
 import Input from '../UI/Input';
 import Button from '../UI/Button';
+import Card from '../UI/Card';
 
 export default function NetworkHospitals() {
   const [searchData, setSearchData] = useState({
@@ -33,14 +34,14 @@ export default function NetworkHospitals() {
   };
 
   const benefits = [
-    { icon: Shield, text: 'Cashless Treatment', color: 'blue' },
-    { icon: Award, text: 'Quality Healthcare', color: 'purple' },
-    { icon: CheckCircle, text: 'Quick Approval', color: 'green' },
-    { icon: Star, text: 'Best Facilities', color: 'orange' }
+    { icon: Shield, text: 'Cashless Treatment' },
+    { icon: Award, text: 'Quality Healthcare' },
+    { icon: CheckCircle, text: 'Quick Approval' },
+    { icon: Star, text: 'Best Facilities' }
   ];
 
   return (
-    <section className="py-16 bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4">
         <div className="mb-12 aos-animate text-center">
           <p className="text-blue-600 font-medium mb-2 uppercase text-sm tracking-wider">OUR NETWORK HOSPITALS</p>
@@ -53,7 +54,7 @@ export default function NetworkHospitals() {
         </div>
 
         {/* Enhanced Search Form */}
-        <div className="bg-white rounded-3xl p-8 mb-12 shadow-2xl aos-animate">
+        <Card className="mb-16 aos-animate">
           <h3 className="text-2xl font-bold text-gray-900 mb-6">Find Your Hospital</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <Input
@@ -75,24 +76,22 @@ export default function NetworkHospitals() {
               onChange={(e) => setSearchData({...searchData, state: e.target.value})}
             />
           </div>
-          <Button text="Search Hospitals" variant="primary" onClick={handleSearch} className="w-full md:w-auto" />
-        </div>
+          <div className="flex justify-end">
+            <Button text="Search Hospitals" variant="primary" onClick={handleSearch} className="w-full md:w-auto" />
+          </div>
+        </Card>
 
         {/* Benefits Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 aos-animate">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16 aos-animate">
           {benefits.map((benefit, idx) => {
             const Icon = benefit.icon;
-            const colors = {
-              blue: 'from-blue-500 to-blue-600',
-              purple: 'from-purple-500 to-purple-600',
-              green: 'from-green-500 to-green-600',
-              orange: 'from-orange-500 to-orange-600'
-            };
             
             return (
-              <div key={idx} className={`bg-gradient-to-br ${colors[benefit.color]} p-6 rounded-2xl text-white text-center transform hover:scale-105 transition-all duration-300 shadow-lg`}>
-                <Icon className="w-10 h-10 mx-auto mb-3" />
-                <p className="font-semibold">{benefit.text}</p>
+              <div key={idx} className="flex flex-col items-center text-center group cursor-default">
+                <div className="w-20 h-20 rounded-full bg-white border border-gray-100 shadow-lg flex items-center justify-center mb-4 group-hover:border-blue-500 group-hover:scale-110 transition-all duration-300">
+                  <Icon className="w-8 h-8 text-blue-600" />
+                </div>
+                <p className="font-bold text-gray-800 text-lg">{benefit.text}</p>
               </div>
             );
           })}
@@ -100,53 +99,51 @@ export default function NetworkHospitals() {
 
         {/* Information Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 aos-animate">
-          <div className="bg-gradient-to-br from-blue-500 to-cyan-500 rounded-3xl p-8 text-white shadow-xl transform hover:scale-105 transition-all duration-300">
-            <div className="bg-white/20 backdrop-blur-sm w-16 h-16 rounded-2xl flex items-center justify-center mb-4">
-              <MapPin className="w-8 h-8" />
+          <Card className="hover:-translate-y-2">
+            <div className="bg-blue-50 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
+              <MapPin className="w-7 h-7 text-blue-600" />
             </div>
-            <h3 className="text-2xl font-bold mb-4">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
               What Are Network Hospitals & Why Choose Them?
             </h3>
-            <p className="leading-relaxed mb-4 text-blue-50">
+            <p className="leading-relaxed mb-6 text-gray-600">
               Network hospitals are healthcare facilities that have partnered with insurance companies to provide cashless treatment. These hospitals have pre-negotiated rates and streamlined claim processes.
             </p>
             <ul className="space-y-2">
-              <li className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5" />
-                <span>Instant cashless approval</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5" />
-                <span>Quality healthcare services</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5" />
-                <span>Hassle-free claims settlement</span>
-              </li>
+              {[
+                'Instant cashless approval',
+                'Quality healthcare services',
+                'Hassle-free claims settlement'
+              ].map((item, i) => (
+                <li key={i} className="flex items-center gap-3 text-gray-700 font-medium">
+                  <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                  <span>{item}</span>
+                </li>
+              ))}
             </ul>
-          </div>
+          </Card>
 
-          <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-3xl p-8 text-white shadow-xl transform hover:scale-105 transition-all duration-300">
-            <div className="bg-white/20 backdrop-blur-sm w-16 h-16 rounded-2xl flex items-center justify-center mb-4">
-              <Phone className="w-8 h-8" />
+          <Card className="hover:-translate-y-2 border-blue-100 bg-blue-50/30">
+            <div className="bg-blue-600 w-14 h-14 rounded-xl flex items-center justify-center mb-6 shadow-lg shadow-blue-200">
+              <Phone className="w-7 h-7 text-white" />
             </div>
-            <h3 className="text-2xl font-bold mb-4">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
               Your First Choice for Seamless Healthcare
             </h3>
-            <p className="leading-relaxed mb-4 text-purple-50">
+            <p className="leading-relaxed mb-8 text-gray-600">
               With over 14,000+ network hospitals across India, we ensure you get the best healthcare services wherever you are. Our extensive network covers metros, tier-2, and tier-3 cities.
             </p>
             <div className="space-y-3">
-              <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm rounded-lg p-3">
-                <Mail className="w-5 h-5" />
-                <span>support@health.com</span>
+              <div className="flex items-center gap-3 bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                <Mail className="w-5 h-5 text-blue-600" />
+                <span className="font-semibold text-gray-800">support@health.com</span>
               </div>
-              <div className="flex items-center gap-3 bg-white/20 backdrop-blur-sm rounded-lg p-3">
-                <Phone className="w-5 h-5" />
-                <span>1800-123-4567</span>
+              <div className="flex items-center gap-3 bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                <Phone className="w-5 h-5 text-blue-600" />
+                <span className="font-semibold text-gray-800">1800-123-4567</span>
               </div>
             </div>
-          </div>
+          </Card>
         </div>
       </div>
 

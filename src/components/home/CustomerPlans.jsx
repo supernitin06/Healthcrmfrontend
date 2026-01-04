@@ -1,23 +1,11 @@
-import React, { useEffect } from 'react';
-import { Star, CheckCircle, Shield, Award } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Star, CheckCircle, Shield, Award, ChevronRight, Zap } from 'lucide-react';
 import Button from '../UI/Button';
+import Card from '../UI/Card';
 
 export default function CustomerPlans() {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate-fade-in-up');
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    document.querySelectorAll('.aos-animate').forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const plans = [
     {
@@ -25,7 +13,6 @@ export default function CustomerPlans() {
       subtitle: 'Premium Health Coverage',
       description: 'Super Star offers enhanced health insurance solution with comprehensive medical cover. It brings a basket of customisable options to build a health policy that suits your insurance needs.',
       image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&h=400&fit=crop',
-      position: 'left',
       features: ['Comprehensive Coverage', 'Customizable Options', 'Lifetime Renewability', 'No Claim Bonus'],
       price: '₹12,999/year',
       rating: 4.9
@@ -35,7 +22,6 @@ export default function CustomerPlans() {
       subtitle: 'Complete Family Protection',
       description: 'Comprises the insurance coverage for your family. Get covered up to your retirement age with extensive benefits and peace of mind.',
       image: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=600&h=400&fit=crop',
-      position: 'right',
       features: ['Family Floater', 'Retirement Coverage', 'Pre & Post Hospitalization', 'Maternity Benefits'],
       price: '₹18,999/year',
       rating: 4.8
@@ -45,12 +31,22 @@ export default function CustomerPlans() {
       subtitle: 'Perpetual Health Security',
       description: 'A star health policy with perpetual coverage under policy plans. Cover your entire family under one comprehensive plan with unmatched benefits.',
       image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600&h=400&fit=crop',
-      position: 'left',
       features: ['Perpetual Coverage', 'Whole Family Protection', 'Critical Illness Cover', 'Health Checkups'],
       price: '₹24,999/year',
       rating: 5.0
     }
   ];
+
+  const handlePlanChange = (index) => {
+    if (index === activeIndex) return;
+    setIsAnimating(true);
+    setTimeout(() => {
+      setActiveIndex(index);
+      setIsAnimating(false);
+    }, 300);
+  };
+
+  const activePlan = plans[activeIndex];
 
   return (
     <section className="py-16 bg-gradient-to-br from-gray-50 to-blue-50 relative overflow-hidden">
@@ -59,7 +55,7 @@ export default function CustomerPlans() {
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-200 rounded-full opacity-20 blur-3xl"></div>
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
-        <div className="text-center mb-16 aos-animate">
+        <div className="text-center mb-12">
           <p className="text-blue-600 font-medium mb-2 uppercase text-sm tracking-wider">OUR TOP HEALTH INSURANCE POLICIES</p>
           <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
             Plans our Customers Love and Trust!
@@ -69,112 +65,119 @@ export default function CustomerPlans() {
           </p>
         </div>
 
-        <div className="space-y-16">
-          {plans.map((plan, idx) => (
-            <div 
-              key={idx} 
-              className={`flex flex-col ${plan.position === 'right' ? 'md:flex-row-reverse' : 'md:flex-row'} gap-8 items-center aos-animate`}
-              style={{ animationDelay: `${idx * 200}ms` }}
-            >
-              {/* Image Section */}
-              <div className="w-full md:w-1/2 group">
-                <div className="relative overflow-hidden rounded-3xl shadow-2xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
+          {/* Left Side: Plan Selectors */}
+          <div className="lg:col-span-4 flex flex-col gap-4">
+            {plans.map((plan, idx) => (
+              <Card 
+                key={idx}
+                onClick={() => handlePlanChange(idx)}
+                className={`!p-5 cursor-pointer transition-all duration-300 border-2 group relative overflow-hidden ${
+                  activeIndex === idx 
+                    ? 'border-blue-500 bg-white shadow-xl scale-105 z-10' 
+                    : 'border-transparent bg-white/60 hover:bg-white hover:shadow-lg'
+                }`}
+              >
+                <div className="flex items-center justify-between relative z-10">
+                  <div>
+                    <h3 className={`font-bold text-lg mb-1 ${activeIndex === idx ? 'text-blue-600' : 'text-gray-700'}`}>
+                      {plan.title}
+                    </h3>
+                    <p className="text-sm text-gray-500">{plan.subtitle}</p>
+                  </div>
+                  {activeIndex === idx && (
+                    <div className="bg-blue-100 p-2 rounded-full">
+                      <ChevronRight className="w-5 h-5 text-blue-600" />
+                    </div>
+                  )}
+                </div>
+                {activeIndex === idx && (
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500"></div>
+                )}
+              </Card>
+            ))}
+          </div>
+
+          {/* Right Side: Active Plan Details */}
+          <div className="lg:col-span-8">
+            <Card className="!p-0 overflow-hidden h-full border-0 shadow-2xl ring-1 ring-black/5">
+              <div className={`flex flex-col md:flex-row h-full transition-opacity duration-300 ${isAnimating ? 'opacity-50' : 'opacity-100'}`}>
+                {/* Image Section */}
+                <div className="w-full md:w-2/5 relative h-64 md:h-auto">
                   <img 
-                    src={plan.image} 
-                    alt={plan.title}
-                    className="w-full h-96 object-cover transition-transform duration-700 group-hover:scale-110"
+                    src={activePlan.image} 
+                    alt={activePlan.title}
+                    className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent md:bg-gradient-to-r"></div>
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <div className="flex items-center gap-1 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full w-fit mb-2">
+                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      <span className="font-bold text-sm">{activePlan.rating} Rating</span>
+                    </div>
+                    <p className="font-medium text-white/90 text-sm">Most Popular Choice</p>
+                  </div>
+                </div>
+
+                {/* Content Section */}
+                <div className="w-full md:w-3/5 p-8 flex flex-col justify-center bg-white">
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1">
+                      <Zap className="w-3 h-3" /> Best Seller
+                    </span>
+                  </div>
                   
-                  {/* Price Badge */}
-                  <div className="absolute bottom-6 left-6 right-6">
-                    <div className="flex items-center justify-between">
-                      <div className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-white font-semibold">
-                        {plan.subtitle}
+                  <h3 className="text-3xl font-bold text-gray-900 mb-3">{activePlan.title}</h3>
+                  <p className="text-gray-600 leading-relaxed mb-6">{activePlan.description}</p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+                    {activePlan.features.map((feature, i) => (
+                      <div key={i} className="flex items-center gap-2 text-sm text-gray-700">
+                        <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                        <span>{feature}</span>
                       </div>
-                      <div className="flex items-center gap-1 bg-white/20 backdrop-blur-md px-3 py-2 rounded-full text-white">
-                        <Star className="w-4 h-4 fill-current text-yellow-400" />
-                        <span className="font-semibold">{plan.rating}</span>
-                      </div>
-                    </div>
+                    ))}
                   </div>
-                </div>
-              </div>
 
-              {/* Content Section */}
-              <div className="w-full md:w-1/2 bg-white rounded-3xl p-8 shadow-xl">
-                <div className="mb-4">
-                  <span className="inline-block bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-1 rounded-full text-sm font-semibold mb-4">
-                    BEST SELLER
-                  </span>
-                  <h3 className="text-3xl font-bold text-gray-900 mb-2">{plan.title}</h3>
-                  <p className="text-gray-600 leading-relaxed mb-6">{plan.description}</p>
-                </div>
-
-                {/* Features List */}
-                <div className="mb-6 space-y-3">
-                  <h4 className="font-semibold text-gray-900 mb-3">Key Features:</h4>
-                  {plan.features.map((feature, i) => (
-                    <div key={i} className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
-                      <div className="bg-gradient-to-r from-blue-500 to-purple-500 p-1 rounded-full">
-                        <CheckCircle className="w-4 h-4 text-white" />
-                      </div>
-                      <span className="text-gray-700 font-medium">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Price & CTA */}
-                <div className="border-t pt-6">
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between mt-auto pt-6 border-t border-gray-100">
                     <div>
-                      <p className="text-sm text-gray-500 mb-1">Starting from</p>
-                      <p className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-                        {plan.price}
-                      </p>
+                      <p className="text-sm text-gray-500">Starting from</p>
+                      <p className="text-2xl font-bold text-blue-600">{activePlan.price}</p>
                     </div>
-                    <div className="text-right">
-                      <p className="text-sm text-gray-500 mb-1">Coverage up to</p>
-                      <p className="text-xl font-bold text-gray-900">₹25 Lakhs</p>
-                    </div>
+                    <Button text="Get Plan" variant="primary" className="!px-8" />
                   </div>
-                  <Button text="Get This Plan" variant="primary" className="w-full" />
                 </div>
               </div>
-            </div>
-          ))}
+            </Card>
+          </div>
         </div>
 
         {/* Trust Badges */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 aos-animate">
-          <div className="text-center p-6 bg-white rounded-2xl shadow-lg">
-            <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
-              <Shield className="w-8 h-8 text-blue-600" />
-            </div>
-            <p className="font-bold text-gray-900">100% Secure</p>
-            <p className="text-sm text-gray-600">Data Protection</p>
-          </div>
-          <div className="text-center p-6 bg-white rounded-2xl shadow-lg">
-            <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
-              <CheckCircle className="w-8 h-8 text-green-600" />
-            </div>
-            <p className="font-bold text-gray-900">Quick Claims</p>
-            <p className="text-sm text-gray-600">Fast Settlement</p>
-          </div>
-          <div className="text-center p-6 bg-white rounded-2xl shadow-lg">
-            <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
-              <Award className="w-8 h-8 text-purple-600" />
-            </div>
-            <p className="font-bold text-gray-900">Award Winning</p>
-            <p className="text-sm text-gray-600">Industry Leader</p>
-          </div>
-          <div className="text-center p-6 bg-white rounded-2xl shadow-lg">
-            <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
-              <Star className="w-8 h-8 text-orange-600" />
-            </div>
-            <p className="font-bold text-gray-900">4.8/5 Rating</p>
-            <p className="text-sm text-gray-600">Customer Reviews</p>
-          </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {[
+            { icon: Shield, title: '100% Secure', subtitle: 'Data Protection', color: 'blue' },
+            { icon: CheckCircle, title: 'Quick Claims', subtitle: 'Fast Settlement', color: 'green' },
+            { icon: Award, title: 'Award Winning', subtitle: 'Industry Leader', color: 'purple' },
+            { icon: Star, title: '4.8/5 Rating', subtitle: 'Customer Reviews', color: 'orange' }
+          ].map((badge, idx) => {
+            const Icon = badge.icon;
+            const colors = {
+              blue: 'bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white',
+              green: 'bg-green-50 text-green-600 group-hover:bg-green-600 group-hover:text-white',
+              purple: 'bg-purple-50 text-purple-600 group-hover:bg-purple-600 group-hover:text-white',
+              orange: 'bg-orange-50 text-orange-600 group-hover:bg-orange-600 group-hover:text-white'
+            };
+            
+            return (
+              <Card key={idx} className="text-center group hover:-translate-y-2 !p-6 border-transparent hover:border-gray-100 cursor-pointer">
+                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 transition-all duration-300 ${colors[badge.color]}`}>
+                  <Icon className="w-8 h-8 transition-transform duration-300 group-hover:scale-110" />
+                </div>
+                <h4 className="font-bold text-gray-900 text-lg mb-1">{badge.title}</h4>
+                <p className="text-sm text-gray-500 font-medium">{badge.subtitle}</p>
+              </Card>
+            );
+          })}
         </div>
       </div>
 
